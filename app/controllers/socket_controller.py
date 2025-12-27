@@ -16,9 +16,11 @@ async def save_message(username, room, content):
     """Save message to database using a manually created session."""
     async with async_session() as db:
         new_msg = Message(room=room, sender=username, content=content)
+        print(new_msg)
         db.add(new_msg)
         await db.commit()
         await db.refresh(new_msg)
+
         return new_msg
 
 
@@ -86,14 +88,16 @@ def register_socket_events(sio: socketio.AsyncServer):
         # 4. Retrieve User from Session
         # We don't trust the client to tell us who they are. We look up our session.
         session = await sio.get_session(sid)
+        print(session)
         user = session[
             "user"
         ]  # We are guaranteed this exists because of the connect check
+        username = user["username"]
 
-        print(f"User {user['username']} sent: {content}")
+        print(f"User {username} sent: {content}")
 
         # save message to database
-        saved_msg = await save_message(user, room, content)
+        saved_msg = await save_message(username, room, content)
 
         # Serialize for the frontend
         message_data = {

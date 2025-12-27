@@ -4,6 +4,7 @@ import socketio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.controllers import messages_controller
 from app.controllers.socket_controller import register_socket_events
 from app.core.database import Base, engine
 from app.models.messages import Message  # noqa: F401
@@ -21,6 +22,9 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI app instance
 app = FastAPI(lifespan=lifespan)
+
+# Include API router
+app.include_router(messages_controller.router)
 
 # Configure CORS (Crucial for Socket.IO!)
 app.add_middleware(

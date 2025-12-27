@@ -13,3 +13,6 @@ class Message(Base):
     sender = Column(String)
     content = Column(String)
     timestamp = Column(DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Message(id={self.id}, room='{self.room}', sender='{self.sender}', content='{self.content}', timestamp='{self.timestamp}')>"
