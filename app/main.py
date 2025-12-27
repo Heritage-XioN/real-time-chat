@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.controllers import messages_controller
 from app.controllers.socket_controller import register_socket_events
 from app.core.database import Base, engine
-from app.models.messages import Message  # noqa: F401
+from app.models import messages, private_chat_rooms, users  # noqa: F401
 
 
 @asynccontextmanager

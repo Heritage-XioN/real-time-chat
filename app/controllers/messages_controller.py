@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,8 +10,10 @@ from app.models.messages import Message
 router = APIRouter(prefix="/messages", tags=["Messages"])
 
 
-@router.get("/{room_name}")
-async def get_messages(room_name: str, db: AsyncSession = Depends(get_session)):
+@router.get("/{room_name}", status_code=status.HTTP_200_OK)
+async def get_messages(
+    room_name: str, db: Annotated[AsyncSession, Depends(get_session)]
+):
     # Fetch last 50 messages
     result = await db.execute(
         select(Message)

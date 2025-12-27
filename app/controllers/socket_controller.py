@@ -16,7 +16,6 @@ async def save_message(username, room, content):
     """Save message to database using a manually created session."""
     async with async_session() as db:
         new_msg = Message(room=room, sender=username, content=content)
-        print(new_msg)
         db.add(new_msg)
         await db.commit()
         await db.refresh(new_msg)
