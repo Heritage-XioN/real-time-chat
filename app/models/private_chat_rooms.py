@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.users import User
 
 
+# db table for private_chat
 class PrivateRoom(Base):
     __tablename__ = "private"
 

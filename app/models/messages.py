@@ -1,18 +1,27 @@
-from datetime import datetime
+import uuid
 
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import TIMESTAMP, DateTime, ForeignKey, String, text
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.types import UUID
 
 from app.core.database import Base
 
 
+# db table for messages
 class Message(Base):
     __tablename__ = "messages"
 
-    id = Column(Integer, primary_key=True, index=True)
-    room = Column(String, index=True)
-    sender = Column(String)
-    content = Column(String)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    room: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("private.id"), UUID(as_uuid=True), nullable=False
+    )
+    sender: Mapped[str] = mapped_column(String, nullable=False)
+    content: Mapped[str] = mapped_column(String, nullable=False)
+    timestamp: Mapped[DateTime] = mapped_column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
     def __repr__(self):
         return f"<Message(id={self.id}, room='{self.room}', sender='{self.sender}', content='{self.content}', timestamp='{self.timestamp}')>"

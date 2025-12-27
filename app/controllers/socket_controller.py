@@ -1,4 +1,4 @@
-import socketio
+import socketio  # pyright: ignore[reportMissingTypeStubs]
 
 from app.core.database import async_session
 from app.models.messages import Message
@@ -103,7 +103,7 @@ def register_socket_events(sio: socketio.AsyncServer):
             "id": saved_msg.id,
             "sender": saved_msg.sender,
             "content": saved_msg.content,
-            "timestamp": saved_msg.timestamp.isoformat(),
+            "timestamp": saved_msg.timestamp,
         }
 
         print(f"Saved & Sending: {content}")

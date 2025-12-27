@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-import socketio
+import socketio  # pyright: ignore[reportMissingTypeStubs]
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -10,13 +10,15 @@ from app.core.database import Base, engine
 from app.models import messages, private_chat_rooms, users  # noqa: F401
 
 
+# handles creating database tables on startup
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # --- Startup: Create tables ---
+    # --- initiate engine ---
     async with engine.begin() as conn:
+        # create database table
         await conn.run_sync(Base.metadata.create_all)
     yield
-    # --- Shutdown logic (if any) ---
+    # --- Dispose engine ---
     await engine.dispose()
 
 
@@ -26,7 +28,7 @@ app = FastAPI(lifespan=lifespan)
 # Include API router
 app.include_router(messages_controller.router)
 
-# Configure CORS (Crucial for Socket.IO!)
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -43,7 +45,6 @@ sio = socketio.AsyncServer(
 
 # Wrap FastAPI in the Socket.IO ASGI App
 socket_app = socketio.ASGIApp(sio, other_asgi_app=app)
-
 
 # --- Define Socket Events ---
 register_socket_events(sio)
