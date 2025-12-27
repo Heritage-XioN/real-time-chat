@@ -1,0 +1,25 @@
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.database import get_session
+from app.models.messages import Message
+
+router = APIRouter(prefix="/messages", tags=["Messages"])
+
+
+@router.get("/{room_name}", status_code=status.HTTP_200_OK)
+async def get_messages(
+    room_name: str, db: Annotated[AsyncSession, Depends(get_session)]
+):
+    # Fetch last 50 messages
+    result = await db.execute(
+        select(Message)
+        .where(Message.room == room_name)
+        .order_by(Message.timestamp.asc())
+        .limit(50)
+    )
+    messages = result.scalars().all()
+    return messages
