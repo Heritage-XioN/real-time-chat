@@ -35,6 +35,7 @@ def verify_access_token(token: str, credentials_exception):
             token,
             settings.SECRET_KEY,
             algorithms=[settings.ALGORITHM],
+            options={"require": ["exp", "user_id"]},
         )
         user_id = payload.get("user_id")
         if not user_id:
