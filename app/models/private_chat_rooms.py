@@ -20,11 +20,9 @@ class PrivateRoom(Base):
     )
     user_id1: Mapped[UUID] = mapped_column(
         ForeignKey("users.id"),
-        primary_key=True,
     )
     user_id2: Mapped[UUID] = mapped_column(
         ForeignKey("users.id"),
-        primary_key=True,
     )
     created_at: Mapped[DateTime] = mapped_column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")

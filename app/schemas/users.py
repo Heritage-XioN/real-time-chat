@@ -8,3 +8,7 @@ class UserBase(BaseModel):
     email: EmailStr
     username: str
     password: str
+
+
+class UserResponse(BaseModel):
+    status: str
