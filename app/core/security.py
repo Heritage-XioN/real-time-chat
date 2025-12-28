@@ -47,8 +47,8 @@ async def get_current_user(
     db: Annotated[AsyncSession, Depends(get_session)],
 ):
     credentials_exception = HTTPException(
-        status.HTTP_401_UNAUTHORIZED,
-        "could not validate credentials",
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     token_data = verify_access_token(token, credentials_exception)
