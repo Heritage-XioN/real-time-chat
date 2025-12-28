@@ -14,8 +14,6 @@ from app.models.users import User
 
 oauth2_scheme = OAuth2PasswordBearer("/auth/login")
 
-# if any errors occur with token creation then look at expire
-
 
 # creates jwt token
 def create_access_token(data: dict):

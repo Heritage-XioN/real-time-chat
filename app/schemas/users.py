@@ -7,8 +7,7 @@ class UserBase(BaseModel):
     id: uuid.UUID
     email: EmailStr
     username: str
-    password: str
 
 
-class UserResponse(BaseModel):
-    status: str
+class UserResponse(UserBase):
+    pass

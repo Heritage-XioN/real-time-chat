@@ -4,7 +4,7 @@ import socketio  # pyright: ignore[reportMissingTypeStubs]
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.controllers import auth_controller, messages_controller
+from app.controllers import auth_controller, messages_controller, users_controller
 from app.controllers.socket_controller import register_socket_events
 from app.core.database import Base, engine
 from app.models import messages, private_chat_rooms, users  # noqa: F401
@@ -28,6 +28,7 @@ app = FastAPI(lifespan=lifespan)
 # Include API router
 app.include_router(messages_controller.router)
 app.include_router(auth_controller.router)
+app.include_router(users_controller.router)
 
 # Configure CORS
 app.add_middleware(
