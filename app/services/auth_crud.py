@@ -39,7 +39,10 @@ async def create_user(user: Signup, db: Annotated[AsyncSession, Depends(get_sess
         await db.refresh(new_user)
     except Exception:
         await db.rollback()
-        raise
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="failed to create user",
+        )
     return {"status": "success"}
 
 
