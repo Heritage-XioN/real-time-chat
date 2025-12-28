@@ -15,7 +15,7 @@ class Message(Base):
         UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     room: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("private.id"), UUID(as_uuid=True), nullable=False
+        UUID(as_uuid=True), ForeignKey("private.id"), nullable=False
     )
     sender: Mapped[str] = mapped_column(String, nullable=False)
     content: Mapped[str] = mapped_column(String, nullable=False)

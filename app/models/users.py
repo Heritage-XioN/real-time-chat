@@ -18,9 +18,9 @@ class User(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
-    email: Mapped[str] = mapped_column(String(50))
-    username: Mapped[str] = mapped_column(String(50))
-    password: Mapped[str] = mapped_column(String(50))
+    email: Mapped[str] = mapped_column(String, nullable=False, unique=True, index=True)
+    username: Mapped[str] = mapped_column(String, nullable=False, unique=True, index=True)
+    password: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
