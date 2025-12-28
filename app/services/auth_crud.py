@@ -56,11 +56,19 @@ async def login(
 
     # checks if the user exists
     if not result:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "Invalid credentials")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     # if the user exist then check if they provided the correct password
     if not verify(login_credentials.password, result.password):
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "Invalid credentials")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     # if all statement above evaluate withot exceptions then create auth token
     access_token = create_access_token(data={"user_id": str(result.id)})
