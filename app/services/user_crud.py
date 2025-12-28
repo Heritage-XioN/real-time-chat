@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session
@@ -14,6 +15,12 @@ async def get_logged_in_user(user: Annotated[User, Depends(get_current_user)]):
     if not user:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "user not authenticated")
     return user
+
+
+async def get_users(db: Annotated[AsyncSession, Depends(get_session)]):
+    user_query = await db.execute(select(User))
+    result = user_query.scalars().all()
+    return result
 
 
 async def update_user(
@@ -31,7 +38,7 @@ async def update_user(
         )
 
     # handles updating the user in the db
-    for field, value in user_data.model_dump(exclude={'id'}).items():
+    for field, value in user_data.model_dump(exclude={"id"}).items():
         setattr(user_query, field, value)
 
     # handles commiting data to db and rollback in case of error
