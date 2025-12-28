@@ -31,12 +31,18 @@ def create_access_token(data: dict):
 
 def verify_access_token(token: str, credentials_exception):
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
-        id: str = payload.get("user_id")  # type: ignore
-        token_data = id
-        if token_data is None:
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM],
+        )
+        user_id = payload.get("user_id")
+        if not user_id:
             raise credentials_exception
-    except InvalidTokenError:
+
+        # Ensure the id is a valid UUID for downstream DB lookups
+        token_data = uuid.UUID(user_id)
+    except (InvalidTokenError, ValueError, TypeError):
         raise credentials_exception
     return token_data
 
