@@ -53,4 +53,6 @@ async def get_current_user(
     )
     token_data = verify_access_token(token, credentials_exception)
     user_check = await db.get(User, token_data)
+    if user_check is None:
+        raise credentials_exception
     return user_check
