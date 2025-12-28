@@ -42,9 +42,9 @@ def verify_access_token(token: str, credentials_exception):
 
 
 # this is used to verify the logged in user for performing path operations that auth protected
-def get_current_user(
+async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    db: Annotated[Session, Depends(get_session)],
+    db: Annotated[AsyncSession, Depends(get_session)],
 ):
     credentials_exception = HTTPException(
         status.HTTP_401_UNAUTHORIZED,
@@ -52,5 +52,5 @@ def get_current_user(
         {"WWW_Authentication": "Bearer"},
     )
     token_data = verify_access_token(token, credentials_exception)
-    user_check = db.get(User, token_data)
+    user_check = await db.get(User, token_data)
     return user_check
