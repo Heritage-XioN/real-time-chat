@@ -49,7 +49,7 @@ async def get_current_user(
     credentials_exception = HTTPException(
         status.HTTP_401_UNAUTHORIZED,
         "could not validate credentials",
-        {"WWW_Authentication": "Bearer"},
+        headers={"WWW-Authenticate": "Bearer"},
     )
     token_data = verify_access_token(token, credentials_exception)
     user_check = await db.get(User, token_data)
