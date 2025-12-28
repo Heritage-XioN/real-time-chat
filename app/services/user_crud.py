@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.core.database import get_session
 from app.core.security import get_current_user
@@ -15,6 +16,26 @@ async def get_logged_in_user(user: Annotated[User, Depends(get_current_user)]):
     if not user:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "user not authenticated")
     return user
+
+
+async def get_user_chats(
+    db: Annotated[AsyncSession, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_user)],
+):
+    user_chat_query = await db.execute(
+        select(User)
+        .options(selectinload(User.rooms_as_user1))
+        .where(User.id == user.id)
+    )
+
+    result = user_chat_query.scalar_one_or_none()
+
+    if not result:
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND, f"user: {user.id} has no chats yet"
+        )
+
+    return result
 
 
 async def get_users(db: Annotated[AsyncSession, Depends(get_session)]):
@@ -55,3 +76,9 @@ async def update_user(
 
 
 # TODO: add other CRUD operations(update , delete)
+#  select(User).options(selectinload(User.rooms_as_user1))
+# result = await db.execute(
+#     select(User)
+#     .options(selectinload(User.rooms_as_user1))
+#     .where(User.id == token_data)
+# )

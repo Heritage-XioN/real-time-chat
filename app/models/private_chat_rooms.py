@@ -18,12 +18,8 @@ class PrivateRoom(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
-    user_id1: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id"),
-    )
-    user_id2: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id"),
-    )
+    user_id1: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    user_id2: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
     created_at: Mapped[DateTime] = mapped_column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
