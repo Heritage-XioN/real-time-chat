@@ -34,6 +34,8 @@ async def create_user(user: Signup, db: Annotated[AsyncSession, Depends(get_sess
 
     # adds user to db if no errors
     db.add(new_user)
+
+    # handles commiting data to db and rollback in case of error
     try:
         await db.commit()
         await db.refresh(new_user)
