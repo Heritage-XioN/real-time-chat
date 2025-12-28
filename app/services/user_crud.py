@@ -31,7 +31,7 @@ async def update_user(
         )
 
     # handles updating the user in the db
-    for field, value in user_data.model_dump().items():
+    for field, value in user_data.model_dump(exclude={'id'}).items():
         setattr(user_query, field, value)
 
     # handles commiting data to db and rollback in case of error
