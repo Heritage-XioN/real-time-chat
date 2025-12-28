@@ -18,7 +18,7 @@ async def get_user(user: Annotated[User, Depends(get_current_user)]):
     return await get_logged_in_user(user)
 
 
-@router.put("/update", status_code=status.HTTP_200_OK, response_model=UserResponse)
+@router.patch("/", status_code=status.HTTP_200_OK, response_model=UserResponse)
 async def update_user_details(
     user_data: UserUpdate,
     db: Annotated[AsyncSession, Depends(get_session)],
