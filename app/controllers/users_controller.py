@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_session
 from app.core.security import get_current_user
 from app.models.users import User
-from app.schemas.users import UserBase, UserResponse
+from app.schemas.users import UserResponse, UserUpdate
 from app.services.user_crud import get_logged_in_user, update_user
 
 router = APIRouter(prefix="/users", tags=["user"])
@@ -20,7 +20,7 @@ async def get_user(user: Annotated[User, Depends(get_current_user)]):
 
 @router.put("/update", status_code=status.HTTP_200_OK, response_model=UserResponse)
 async def update_user_details(
-    user_data: UserBase,
+    user_data: UserUpdate,
     db: Annotated[AsyncSession, Depends(get_session)],
     user: Annotated[User, Depends(get_current_user)],
 ):

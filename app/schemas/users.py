@@ -13,3 +13,8 @@ class UserBase(BaseModel):
 
 class UserResponse(UserBase):
     pass
+
+
+class UserUpdate(BaseModel):
+    email: EmailStr
+    username: str

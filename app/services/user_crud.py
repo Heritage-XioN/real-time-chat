@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_session
 from app.core.security import get_current_user
 from app.models.users import User
-from app.schemas.users import UserBase
+from app.schemas.users import UserUpdate
 
 
 async def get_logged_in_user(user: Annotated[User, Depends(get_current_user)]):
@@ -17,7 +17,7 @@ async def get_logged_in_user(user: Annotated[User, Depends(get_current_user)]):
 
 
 async def update_user(
-    user_data: UserBase,
+    user_data: UserUpdate,
     db: Annotated[AsyncSession, Depends(get_session)],
     user: Annotated[User, Depends(get_current_user)],
 ):
