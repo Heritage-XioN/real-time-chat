@@ -26,7 +26,6 @@ class User(Base):
     )
 
     # REVERSE RELATIONSHIPS
-    # We must specify which foreign key on the PrivateRoom refers to this list
     rooms_as_user1: Mapped[List["PrivateRoom"]] = relationship(
         "PrivateRoom", back_populates="user1", foreign_keys="[PrivateRoom.user_id1]"
     )
@@ -34,3 +33,8 @@ class User(Base):
     rooms_as_user2: Mapped[List["PrivateRoom"]] = relationship(
         "PrivateRoom", back_populates="user2", foreign_keys="[PrivateRoom.user_id2]"
     )
+
+    @property
+    def all_rooms(self) -> List["PrivateRoom"]:
+        """Returns a combined list of rooms where the user is either user1 or user2"""
+        return self.rooms_as_user1 + self.rooms_as_user2

@@ -1,6 +1,9 @@
 import uuid
+from typing import List
 
 from pydantic import BaseModel, ConfigDict, EmailStr
+
+from app.schemas.private_room import PrivateRoomBase
 
 
 class UserBase(BaseModel):
@@ -12,6 +15,11 @@ class UserBase(BaseModel):
 
 
 class UserResponse(UserBase):
+    pass
+
+
+class UserChatResponse(UserBase):
+    all_rooms: List[PrivateRoomBase]
     pass
 
 
