@@ -24,7 +24,7 @@ async def get_user_chats(
 ):
     user_chat_query = await db.execute(
         select(User)
-        .options(selectinload(User.rooms_as_user1))
+        .options(selectinload(User.rooms_as_user1), selectinload(User.rooms_as_user2))
         .where(User.id == user.id)
     )
 

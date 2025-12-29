@@ -19,7 +19,7 @@ class UserResponse(UserBase):
 
 
 class UserChatResponse(UserBase):
-    rooms_as_user1: List[PrivateRoomBase]
+    all_rooms: List[PrivateRoomBase]
     pass
 
 
