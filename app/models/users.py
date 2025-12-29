@@ -26,7 +26,6 @@ class User(Base):
     )
 
     # REVERSE RELATIONSHIPS
-    # We must specify which foreign key on the PrivateRoom refers to this list
     rooms_as_user1: Mapped[List["PrivateRoom"]] = relationship(
         "PrivateRoom", back_populates="user1", foreign_keys="[PrivateRoom.user_id1]"
     )

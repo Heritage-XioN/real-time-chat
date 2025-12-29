@@ -18,8 +18,8 @@ router = APIRouter(prefix="/private", tags=["private room"])
     response_model=privateRoomResponse,
 )
 async def create_room(
-    user_id: CreatePrivateRoom,
+    data: CreatePrivateRoom,
     db: Annotated[AsyncSession, Depends(get_session)],
     user: Annotated[User, Depends(get_current_user)],
 ):
-    return await create_private_room(user_id, db, user)
+    return await create_private_room(data, db, user)
